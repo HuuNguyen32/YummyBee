@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">YummyBee</string>
+    <string name="login">Đăng nhập</string>
+    <string name="hint_password">Mật khẩu *</string>
+    <string name="hint_email">Email *</string>
+    <string name="register_now_txt">Đăng ký ngay</string>
+    <string name="forgot_password_txt">Quên mật khẩu?</string>
+    <string name="continue_with_no_login_txt">Tiếp tục mà không đăng nhập</string>
+    <string name="register">Đăng ký tài khoản</string>
+    <string name="first_name_hint">Họ *</string>
+    <string name="last_name_hint">Tên *</string>
+    <string name="hint_phone_number">Số điện thoại *</string>
+    <string name="hint_confirm_password">Xác nhận mật khẩu *</string>
+    <string name="hint_birthday">Ngày sinh *</string>
+    <string name="hint_gender">Giới tính *</string>
+    <string name="hint_city">Chọn Tỉnh/Thành *</string>
+    <string name="hint_forgot_password">Vui lòng nhập email *</string>
+    <string name="security_title">Đồng ý với <font color="#FF248fe8">Chính sách, quy định chung và Thông báo bảo mật cá nhân</font></string>
+    <string name="forgot_password_title">Quên mật khẩu</string>
+    <string name="forgot_password_message">Vui lòng nhập email vào ô bên dưới để tiến hành lấy lại mật khẩu.</string>
+    <string name="send">Gửi</string>
+</resources>
