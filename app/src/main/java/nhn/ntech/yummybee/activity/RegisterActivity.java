@@ -1,4 +1,4 @@
-package nhn.ntech.yummybee;
+package nhn.ntech.yummybee.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,14 +11,12 @@ import android.widget.ScrollView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import nhn.ntech.yummybee.R;
 
 public class RegisterActivity extends AppCompatActivity {
 

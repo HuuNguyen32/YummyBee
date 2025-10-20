@@ -1,4 +1,4 @@
-package nhn.ntech.yummybee;
+package nhn.ntech.yummybee.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,11 +15,10 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import nhn.ntech.yummybee.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -76,6 +75,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        btnNonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
     }
 
     private void mapping(){

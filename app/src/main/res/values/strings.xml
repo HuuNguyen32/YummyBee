@@ -19,4 +19,21 @@
     <string name="forgot_password_title">Quên mật khẩu</string>
     <string name="forgot_password_message">Vui lòng nhập email vào ô bên dưới để tiến hành lấy lại mật khẩu.</string>
     <string name="send">Gửi</string>
+    <string name="home">Trang chủ</string>
+    <string name="order">Thực đơn</string>
+    <string name="cart">Giỏ hàng</string>
+    <string name="account">Tài khoản</string>
+    <string name="settings">Cài đặt</string>
+    <string name="share">Chia sẻ</string>
+    <string name="about_us">Về chúng tôi</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="another_option">Lựa chọn khác</string>
+    <string name="history">Lịch sử mua hàng</string>
+    <string name="logout">Logout</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="welcome_to_yummy_bee">Welcome to YummyBee</string>
+    <string name="favorite">Yêu thích</string>
+    <string name="notification">Thông báo</string>
 </resources>

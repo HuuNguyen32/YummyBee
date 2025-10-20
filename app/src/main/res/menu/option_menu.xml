@@ -4,7 +4,7 @@
     <item
         android:id="@+id/optionFavorite"
         android:icon="@drawable/baseline_favorite_24"
-        app:iconTint="@color/orange"
+        app:iconTint="@color/white"
         android:title="@string/favorite"
         app:showAsAction="ifRoom"/>
 
