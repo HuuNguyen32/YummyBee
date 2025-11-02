@@ -36,4 +36,21 @@
     <string name="welcome_to_yummy_bee">Welcome to YummyBee</string>
     <string name="favorite">Yêu thích</string>
     <string name="notification">Thông báo</string>
+    <string name="search_hint">Bạn đang thèm gì nào?</string>
+    <string name="category">Danh mục</string>
+    <string name="food">Đồ ăn phổ biến</string>
+    <string name="zero_price">0,0 đ</string>
+    <string name="title">Title</string>
+    <string name="five_star_rate">5.0</string>
+    <string name="see_all">Xem tất cả</string>
+    <string name="setting">Cài đặt</string>
+    <string name="edit_profile">Chỉnh Sửa Tài Khoản</string>
+    <string name="address">Địa chỉ giao hàng</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="all_products">Tất cả món ăn</string>
+    <string name="products">Sản phẩm</string>
+    <string name="cancel_button">Hủy</string>
+    <string name="yes_button">Đồng ý</string>
+    <string name="five_stars">5 sao</string>
+    <string name="des_food_detail">Mô tả:</string>
 </resources>

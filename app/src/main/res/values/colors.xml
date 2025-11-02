@@ -8,4 +8,8 @@
     <color name="silver">#FFC7C6C3</color>
     <color name="gray">#FF959595</color>
     <color name="blue">#FF248FE8</color>
+    <color name="light_gray">#FFF0F0F0</color>
+    <color name="neutral">#FFF4F4F6</color>
+    <color name="neutral_300">#FFACB0B9</color>
+    <color name="neutral_600">#FF565C67</color>
 </resources>
