@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/alabaster"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/neutral"
-    android:clickable="true"
-    android:focusable="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activity.OrderFragment">
+    tools:context=".activity.NotificationActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:paddingTop="38dp"
-        android:paddingBottom="8dp"
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
         app:navigationIconTint="@color/white"
         android:background="@color/red">
         <TextView
-            android:id="@+id/txtTitleToolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/all_products"
+            android:text="@string/notification"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
+    <ScrollView
+        android:id="@+id/scrollViewNotificationScreen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/alabaster"
-        android:paddingBottom="90dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewAllFoods"
+        android:fillViewport="true"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="16dp"
-            android:paddingHorizontal="12dp"
-            android:clipToPadding="false"/>
-        <ProgressBar
-            android:id="@+id/progressBarAllFoods"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            tools:visibility="visible" />
-    </FrameLayout>
+            android:orientation="vertical">
 
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/empty_notifications"
+               android:textColor="@color/neutral_600"
+               android:layout_gravity="center"
+               android:layout_marginTop="16dp"
+               android:textSize="16sp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="350dp"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

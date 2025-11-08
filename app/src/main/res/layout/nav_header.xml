@@ -3,27 +3,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="200dp"
     android:gravity="bottom"
-    android:padding="20dp"
+    android:paddingTop="40dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="20dp"
     android:background="@color/red">
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:background="@drawable/circle_bg"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar_default"/>
     <TextView
+        android:id="@+id/txtDrawerUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nguyen Huu Nguyen"
+        android:text="@string/default_username"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/txtDrawerEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="nhn322004@gmail.com"
+        android:text="@string/default_email"
         android:textSize="14sp"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"/>
