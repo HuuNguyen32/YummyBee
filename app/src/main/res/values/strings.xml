@@ -18,6 +18,7 @@
     <string name="security_title">Đồng ý với <font color="#FF248fe8">Chính sách, quy định chung và Thông báo bảo mật cá nhân</font></string>
     <string name="forgot_password_title">Quên mật khẩu</string>
     <string name="forgot_password_message">Vui lòng nhập email vào ô bên dưới để tiến hành lấy lại mật khẩu.</string>
+    <string name="send_password_message">Chúng tôi đã gửi một liên kết để đặt lại mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư.</string>
     <string name="send">Gửi</string>
     <string name="home">Trang chủ</string>
     <string name="order">Thực đơn</string>
@@ -30,7 +31,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="another_option">Lựa chọn khác</string>
     <string name="history">Lịch sử mua hàng</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Đăng xuất</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="welcome_to_yummy_bee">Welcome to YummyBee</string>
@@ -53,4 +54,34 @@
     <string name="yes_button">Đồng ý</string>
     <string name="five_stars">5 sao</string>
     <string name="des_food_detail">Mô tả:</string>
+    <string name="total_price">Tổng cộng :</string>
+    <string name="example_price">79,000 đ</string>
+    <string name="start_quantity">1</string>
+    <string name="add_to_cart">Thêm vào giỏ</string>
+    <string name="check_out_now">Thanh toán ngay</string>
+    <string name="cart_title">Giỏ hàng</string>
+    <string name="cart_summary">Tóm tắt đơn hàng</string>
+    <string name="buy">Thanh toán</string>
+    <string name="subtotal_title">Tổng phụ</string>
+    <string name="price_total_title">Phí vận chuyển</string>
+    <string name="tax_title">Tổng thuế</string>
+    <string name="zero">0</string>
+    <string name="default_email">xxx000@gmail.com</string>
+    <string name="default_username">Khách hàng</string>
+    <string name="favourite_list_title">Danh sách yêu thích</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="sending_success">Gửi thành công</string>
+    <string name="title_category_default">Đồ ăn</string>
+    <string name="hint_old_password">Mật khẩu cũ *</string>
+    <string name="hint_new_password">Mật khẩu mới *</string>
+    <string name="hint_confirm_new_password">Xác nhận mật khẩu mới *</string>
+    <string name="save_password">Lưu mật khẩu</string>
+    <string name="sum">Tổng</string>
+    <string name="update">Cập nhật</string>
+    <string name="is_updating">Đang cập nhật...</string>
+    <string name="empty_notifications">Hiện tại không có thông báo nào.</string>
+    <string name="get_notification">Nhận thông báo</string>
+    <string name="delete_account">Xóa tài khoản</string>
+    <string name="enter_you_password">Enter you password</string>
+    <string name="add_new_address">Thêm địa chỉ mới</string>
 </resources>
