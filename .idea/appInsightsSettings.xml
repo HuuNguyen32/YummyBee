@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="nhn.ntech.yummybee" />
+                  <option name="mobileSdkAppId" value="1:848651115403:android:bfd4dcd75a5c5c679cad8e" />
+                  <option name="projectId" value="yummybee3204" />
+                  <option name="projectNumber" value="848651115403" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
