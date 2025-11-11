@@ -12,4 +12,5 @@
     <color name="neutral">#FFF4F4F6</color>
     <color name="neutral_300">#FFACB0B9</color>
     <color name="neutral_600">#FF565C67</color>
+    <color name="green_success">#4CAF50</color>
 </resources>
