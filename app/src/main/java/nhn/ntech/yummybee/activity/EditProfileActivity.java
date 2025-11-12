@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,6 +38,7 @@ import nhn.ntech.yummybee.viewmodel.MainViewModel;
 public class EditProfileActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private ScrollView scrollView;
     private TextInputLayout textInputLayoutFirstName, textInputLayoutLastName, textInputLayoutPhone, textInputLayoutBirthday, textInputLayoutEmail;
     private TextInputEditText edtFirstName, edtLastName, edtPhone, edtBirthday, edtEmail;
     private AutoCompleteTextView genderDropdown, cityDropdown;
@@ -53,6 +55,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mapping();
+        LoginActivity.setupUnfocusOnTouch(this, scrollView);
         initData();
         setUpDropDown();
 
@@ -190,6 +193,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void mapping(){
         toolbar = findViewById(R.id.toolbar);
+        scrollView = findViewById(R.id.scrollViewEditProfile);
         edtFirstName = findViewById(R.id.edtFirstName);
         edtLastName = findViewById(R.id.edtLastName);
         edtPhone = findViewById(R.id.edtPhone);
