@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import nhn.ntech.yummybee.R;
 
-public class AboutUsActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
@@ -20,11 +20,9 @@ public class AboutUsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_about_us);
+        setContentView(R.layout.activity_notification);
         mapping();
-        if (toolbar != null){
-            toolbar.setNavigationOnClickListener(view -> finish());
-        }
+        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     private void mapping(){

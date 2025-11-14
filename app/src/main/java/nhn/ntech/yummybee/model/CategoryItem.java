@@ -1,14 +1,16 @@
 package nhn.ntech.yummybee.model;
 
-public class CategoryItem {
+import java.io.Serializable;
+
+public class CategoryItem implements Serializable {
 
     private String id;
     private String name;
     private int order;
     private String imageUrl;
 
-    public CategoryItem(){
 
+    public CategoryItem() {
     }
 
     public CategoryItem(String id, String name, int order, String imageUrl) {
@@ -17,6 +19,7 @@ public class CategoryItem {
         this.order = order;
         this.imageUrl = imageUrl;
     }
+
 
     public String getId() {
         return id;

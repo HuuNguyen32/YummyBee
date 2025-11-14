@@ -1,21 +1,47 @@
 package nhn.ntech.yummybee.model;
 
-public class FoodItem {
+import com.google.firebase.firestore.Exclude;
+
+import java.io.Serializable;
+
+public class FoodItem implements Serializable {
+    @Exclude
+    private String id;
     private String name;
     private String description;
     private long price;
     private String imageUrl;
     private String category_id;
+    private boolean is_available;
 
     public FoodItem() {
     }
 
-    public FoodItem(String name, String description, long price, String imageUrl, String category_id) {
+    public FoodItem(String id, String name, String description, long price, String imageUrl, String category_id) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category_id = category_id;
+    }
+
+    @Exclude
+    public String getId() {
+        return id;
+    }
+
+    @Exclude
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isIs_available() {
+        return is_available;
+    }
+
+    public void setIs_available(boolean is_available) {
+        this.is_available = is_available;
     }
 
     public String getName() {
@@ -50,11 +76,11 @@ public class FoodItem {
         this.imageUrl = imageUrl;
     }
 
-    public String getCategoryId() {
+    public String getCategory_id() {
         return category_id;
     }
 
-    public void setCategoryId(String category_id) {
+    public void setCategory_id(String category_id) {
         this.category_id = category_id;
     }
 }

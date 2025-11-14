@@ -116,4 +116,6 @@
     <string name="about_us_content">YummyBee là ứng dụng đặt đồ ăn nhanh được phát triển bởi Group 04. Chúng tôi cam kết mang đến những món ăn ngon, chất lượng cao và dịch vụ giao hàng nhanh chóng, tiện lợi nhất. Mục tiêu của chúng tôi là làm hài lòng mọi khách hàng với các món ăn nóng hổi và giá cả hợp lý.</string>
     <string name="email_support_yummybee_vn">Email: support@yummybee.vn</string>
     <string name="hotline_1900_6868">Hotline: 1900 6868</string>
+    <string name="please_enter_complete_information">Vui lòng nhập đầy đủ thông tin</string>
+    <string name="delete_all">Xóa tất cả</string>
 </resources>
