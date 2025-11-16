@@ -93,6 +93,7 @@ public class AuthViewModel extends AndroidViewModel {
                         userMap.put("city", city);
                         userMap.put("role","user");
                         userMap.put("createdAt", FieldValue.serverTimestamp());
+                        userMap.put("isNotificationEnabled", true);
 
                         firestore.collection("users")
                                 .document(userId)

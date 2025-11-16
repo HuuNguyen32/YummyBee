@@ -115,7 +115,8 @@ public class LoginActivity extends AppCompatActivity {
                                         userItem.getBirthday(),
                                         userItem.getBirthdayMillis(),
                                         userItem.getGender(),
-                                        userItem.getCity()
+                                        userItem.getCity(),
+                                        userItem.isNotificationEnabled()
                                 );
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import java.util.Objects;
 import nhn.ntech.yummybee.R;
 import nhn.ntech.yummybee.adapter.OrderHistoryAdapter;
 import nhn.ntech.yummybee.model.OrderItem;
+import nhn.ntech.yummybee.utils.DialogUtils;
 import nhn.ntech.yummybee.viewmodel.MainViewModel;
 
 public class OrderHistoryActivity extends AppCompatActivity implements OrderHistoryAdapter.OnOrderClickListener {
@@ -49,8 +51,8 @@ public class OrderHistoryActivity extends AppCompatActivity implements OrderHist
         // Kiểm tra đăng nhập
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             observeOrderHistory();
-
             observeSingleOrderDeleteStatus();
+            observeDeleteAllHistory();
         } else {
             // Chưa đăng nhập
             txtMessageEmpty.setText("Vui lòng đăng nhập để xem lịch sử");
@@ -110,12 +112,30 @@ public class OrderHistoryActivity extends AppCompatActivity implements OrderHist
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_delete_all){
-
+            DialogUtils.showCustomDialogBox(
+                    this,
+                    "Xóa tất cả đơn hàng",
+                    "Bạn có chắc chắn muốn xóa tất cả đơn hàng?",
+                    false,
+                    () -> {
+                        mainViewModel.clearOrderHistory();
+                    }
+            );
+            return true;
         }
-        return super.onContextItemSelected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void observeDeleteAllHistory(){
+        mainViewModel.getHistoryClearStatus().observe(this, aBoolean -> {
+            if (aBoolean){
+                Toast.makeText(this, "Đã xóa tất cả đơn hàng.", Toast.LENGTH_SHORT).show();
+                observeOrderHistory();
+            }
+        });
     }
 
     @Override

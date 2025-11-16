@@ -27,29 +27,23 @@
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
-        android:id="@+id/scrollViewNotificationScreen"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <LinearLayout
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvNotifications"
+            tools:listitem="@layout/viewholder_notification_item"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/txtMessageEmpty"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/empty_notifications"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
 
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/empty_notifications"
-               android:textColor="@color/neutral_600"
-               android:layout_gravity="center"
-               android:layout_marginTop="16dp"
-               android:textSize="16sp"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="350dp"/>
-        </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
 </LinearLayout>

@@ -1,8 +1,10 @@
 package nhn.ntech.yummybee.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import nhn.ntech.yummybee.R;
 import nhn.ntech.yummybee.manager.UserSessionManager;
 import nhn.ntech.yummybee.utils.DialogUtils;
 import nhn.ntech.yummybee.viewmodel.AuthViewModel;
+import nhn.ntech.yummybee.viewmodel.MainViewModel;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -28,6 +31,8 @@ public class SettingActivity extends AppCompatActivity {
     private AppCompatButton btnLogout, btnLogin;
     private UserSessionManager userSessionManager;
     private MaterialDivider viewDividerDeleteAccount;
+    private MainViewModel mainViewModel;
+    private Switch switchNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +40,17 @@ public class SettingActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_setting);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         userSessionManager = new UserSessionManager(this);
         mapping();
         updateLoginState();
-        toolbar.setNavigationOnClickListener(view -> finish());
+        setupToolbar();
+        setupLogOut();
+        setupNotificationSwitch();
+        setUpDeleteAccount();
+    }
+
+    private void setupLogOut() {
         btnLogout.setOnClickListener(view -> {
             DialogUtils.showCustomDialogBox(
                     this,
@@ -55,7 +67,10 @@ public class SettingActivity extends AppCompatActivity {
                     }
             );
         });
-        setUpDeleteAccount();
+    }
+
+    private void setupToolbar() {
+        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     private void updateLoginState() {
@@ -70,6 +85,25 @@ public class SettingActivity extends AppCompatActivity {
                     startActivity(new Intent(this, LoginActivity.class))
             );
         }
+    }
+
+    private void setupNotificationSwitch() {
+        // Lấy trạng thái hiện tại từ Session
+        boolean currentStatus = userSessionManager.getNotificationEnabled();
+        switchNotification.setChecked(currentStatus);
+
+        // Lắng nghe thay đổi
+        switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mainViewModel.updateNotificationSetting(userSessionManager, isChecked);
+        });
+
+        mainViewModel.getNotificationStatus().observe(this, status -> {
+            if (status != null && !status) {
+                Toast.makeText(this, "Đã tắt thông báo", Toast.LENGTH_SHORT).show();
+            } else if (status != null) {
+                Toast.makeText(this, "Đã bật thông báo", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setUpDeleteAccount() {
@@ -109,5 +143,6 @@ public class SettingActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         btnLogin = findViewById(R.id.btnLogin);
         viewDividerDeleteAccount = findViewById(R.id.viewDividerDeleteAccount);
+        switchNotification = findViewById(R.id.switchNotification);
     }
 }

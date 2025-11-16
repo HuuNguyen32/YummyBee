@@ -147,7 +147,8 @@ public class EditProfileActivity extends AppCompatActivity {
                         Objects.requireNonNull(edtBirthday.getText()).toString().trim(),
                         selectedBirthdayMillis,
                         genderDropdown.getText().toString().trim(),
-                        cityDropdown.getText().toString().trim()
+                        cityDropdown.getText().toString().trim(),
+                        userSessionManager.getNotificationEnabled()
                 );
 
                 Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();

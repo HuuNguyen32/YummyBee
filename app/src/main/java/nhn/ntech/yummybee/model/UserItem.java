@@ -1,6 +1,7 @@
 package nhn.ntech.yummybee.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.PropertyName;
 
 public class UserItem {
     // Dùng để lưu Document ID (UID từ Firebase Auth)
@@ -16,6 +17,9 @@ public class UserItem {
     private String role;
     private Timestamp createdAt; // Dùng Timestamp của Firebase
     private String avatarUrl; // Thêm trường ảnh đại diện (từ Cloudinary)
+
+    @PropertyName("isNotificationEnabled")
+    private boolean isNotificationEnabled;
 
 
     // 2. Constructors
@@ -134,5 +138,15 @@ public class UserItem {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    @PropertyName("isNotificationEnabled")
+    public boolean isNotificationEnabled() {
+        return isNotificationEnabled;
+    }
+
+    @PropertyName("isNotificationEnabled")
+    public void setNotificationEnabled(boolean notificationEnabled) {
+        isNotificationEnabled = notificationEnabled;
     }
 }

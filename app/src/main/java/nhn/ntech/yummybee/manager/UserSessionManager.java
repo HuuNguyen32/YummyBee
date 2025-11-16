@@ -15,7 +15,8 @@ public class UserSessionManager {
     }
 
     public void saveUserInfo(String firstName, String lastName, String email,
-                             String phoneNumber, String birthday, long birthdayMillis, String gender, String city) {
+                             String phoneNumber, String birthday, long birthdayMillis,
+                             String gender, String city, boolean isNotificationEnabled) {
         editor.putString("firstName", firstName);
         editor.putString("lastName", lastName);
         editor.putString("email", email);
@@ -25,6 +26,7 @@ public class UserSessionManager {
         editor.putString("gender", gender);
         editor.putString("city", city);
         editor.putBoolean("isLoggedIn", true);
+        editor.putBoolean("isNotificationEnabled",isNotificationEnabled);
         editor.apply();
     }
 
@@ -39,6 +41,15 @@ public class UserSessionManager {
     public String getGender() { return prefs.getString("gender", ""); }
     public String getCity() { return prefs.getString("city", ""); }
     public boolean isLoggedIn() { return prefs.getBoolean("isLoggedIn", false); }
+
+    public boolean getNotificationEnabled() {
+        return prefs.getBoolean("isNotificationEnabled", true);
+    }
+
+    public void setNotificationEnabled(boolean isEnabled) {
+        editor.putBoolean("isNotificationEnabled", isEnabled);
+        editor.apply();
+    }
 
     public void clearSession() {
         editor.clear();

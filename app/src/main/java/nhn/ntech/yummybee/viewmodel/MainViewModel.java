@@ -1,10 +1,13 @@
 package nhn.ntech.yummybee.viewmodel;
 
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -12,10 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import nhn.ntech.yummybee.manager.UserSessionManager;
 import nhn.ntech.yummybee.model.AddressItem;
 import nhn.ntech.yummybee.model.CartItem;
 import nhn.ntech.yummybee.model.CategoryItem;
 import nhn.ntech.yummybee.model.FoodItem;
+import nhn.ntech.yummybee.model.NotificationItem;
 import nhn.ntech.yummybee.model.OrderItem;
 import nhn.ntech.yummybee.model.UserItem;
 import nhn.ntech.yummybee.repository.MainRepository;
@@ -47,6 +52,45 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _singleOrderDeleteStatus = new MutableLiveData<>();
     public LiveData<Boolean> getSingleOrderDeleteStatus() {
         return _singleOrderDeleteStatus;
+    }
+
+    private final MutableLiveData<Boolean> _historyClearStatus = new MutableLiveData<>();
+
+    public LiveData<Boolean> getHistoryClearStatus() {
+        return _historyClearStatus;
+    }
+
+    private final MutableLiveData<Boolean> _favouriteClearStatus = new MutableLiveData<>();
+
+    public LiveData<Boolean> getFavouriteClearStatus() {
+        return _favouriteClearStatus;
+    }
+
+    public final MutableLiveData<Boolean> _notificationStatus = new MutableLiveData<>();
+
+    public LiveData<Boolean> getNotificationStatus() {
+        return _notificationStatus;
+    }
+
+    private final MutableLiveData<Boolean> _notificationClearStatus = new MutableLiveData<>();
+    public LiveData<Boolean> getNotificationClearStatus() {
+        return _notificationClearStatus;
+    }
+
+    public void clearFavourite() {
+        String userId = getUserId();
+        if (userId != null){
+            repository.clearFavourite(userId)
+                    .addOnSuccessListener(unused -> {
+                        _favouriteClearStatus.setValue(true);
+                    })
+                    .addOnFailureListener(e -> {
+                        _favouriteClearStatus.setValue(false);
+                    });
+        }else{
+            _favouriteClearStatus.setValue(false);
+        }
+
     }
 
     public void deleteSingleOrder(String orderId) {
@@ -87,6 +131,17 @@ public class MainViewModel extends ViewModel {
             return;
         }
 
+    }
+
+    public void clearOrderHistory() {
+        String userId = getUserId();
+        if (userId != null) {
+            repository.clearOrderHistory(userId)
+                    .addOnSuccessListener(aVoid -> _historyClearStatus.setValue(true))
+                    .addOnFailureListener(e -> _historyClearStatus.setValue(false));
+        } else {
+            _historyClearStatus.setValue(false);
+        }
     }
 
     public LiveData<ArrayList<OrderItem>> loadOrderHistory() {
@@ -259,6 +314,49 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<UserItem> loadUserInfo(String email){
         return repository.fetchUserByEmail(email);
+    }
+
+    public LiveData<ArrayList<NotificationItem>> loadNotifications() {
+        String userId = getUserId();
+        if (userId == null) {
+            MutableLiveData<ArrayList<NotificationItem>> emptyList = new MutableLiveData<>();
+            emptyList.setValue(new ArrayList<>());
+            return emptyList;
+        }
+        return repository.fetchNotifications(userId);
+    }
+
+    public void updateNotificationSetting(UserSessionManager sessionManager, boolean isEnabled) {
+        String userId = getUserId();
+        if (userId == null) return;
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("isNotificationEnabled", isEnabled);
+
+        repository.updateUserProfile(
+                userId,
+                updates,
+                aVoid -> {
+                    _notificationStatus.setValue(isEnabled);
+
+                    sessionManager.setNotificationEnabled(isEnabled);
+                },
+                e -> {
+                    _notificationStatus.setValue(null);
+                }
+        );
+    }
+
+
+    public void clearNotifications() {
+        String userId = getUserId();
+        if (userId != null) {
+            repository.clearAllNotifications(userId)
+                    .addOnSuccessListener(aVoid -> _notificationClearStatus.setValue(true))
+                    .addOnFailureListener(e -> _notificationClearStatus.setValue(false));
+        } else {
+            _notificationClearStatus.setValue(false);
+        }
     }
 
 }

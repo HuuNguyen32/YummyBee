@@ -110,6 +110,7 @@
     <string name="demo_order_total">Tổng tiền: 150.000 đ</string>
     <string name="order_history">Lịch sử Đặt hàng</string>
     <string name="have_not_any_order">Bạn chưa có đơn hàng nào</string>
+    <string name="have_not_any_favourite">Danh sách yêu thích trống</string>
     <string name="ordered_product">Các sản phẩm đã đặt</string>
     <string name="detail_order">Chi tiết Đơn hàng</string>
     <string name="about_us_title">Về Chúng Tôi</string>
@@ -118,4 +119,7 @@
     <string name="hotline_1900_6868">Hotline: 1900 6868</string>
     <string name="please_enter_complete_information">Vui lòng nhập đầy đủ thông tin</string>
     <string name="delete_all">Xóa tất cả</string>
+    <string name="notification_message">Cảm ơn bạn đã tin tưởng dịch vụ giao hàng của YummyBee. Chúc bạn ngon miệng!</string>
+    <string name="notification_title">Đơn hàng đã giao thành công!</string>
+    <string name="notification_time">10:30 - 20/12</string>
 </resources>

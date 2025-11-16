@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -28,6 +29,7 @@ import nhn.ntech.yummybee.model.AddressItem;
 import nhn.ntech.yummybee.model.CartItem;
 import nhn.ntech.yummybee.model.CategoryItem;
 import nhn.ntech.yummybee.model.FoodItem;
+import nhn.ntech.yummybee.model.NotificationItem;
 import nhn.ntech.yummybee.model.OrderItem;
 import nhn.ntech.yummybee.model.UserItem;
 
@@ -247,6 +249,8 @@ public class MainRepository {
         return favoriteFoods;
     }
 
+
+
     /**
      * Thêm/Xóa một món khỏi danh sách Yêu thích (Logic Toggle).
      */
@@ -295,6 +299,33 @@ public class MainRepository {
                     isFavoriteLiveData.setValue(documentSnapshot != null && documentSnapshot.exists());
                 });
         return isFavoriteLiveData;
+    }
+
+    public Task<Void> clearFavourite(String userId) {
+        if (userId == null) {
+            return Tasks.forException(new IllegalArgumentException("UserID không hợp lệ"));
+        }
+
+        // Lấy tham chiếu đến collection orders của user
+        CollectionReference userOrdersRef = firestore.collection("users")
+                .document(userId)
+                .collection("favorites");
+
+        // Lấy tất cả các Document đơn hàng
+        return userOrdersRef.get().onSuccessTask(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots.isEmpty()) {
+                return Tasks.forResult(null); // Không có gì để xóa
+            }
+            // Tạo một WriteBatch
+            WriteBatch batch = firestore.batch();
+
+            // Lặp qua tất cả document và thêm lệnh xóa vào batch
+            for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                batch.delete(ds.getReference());
+            }
+
+            return batch.commit();
+        });
     }
 
     public LiveData<ArrayList<CartItem>> fetchCartItems(String userId) {
@@ -527,8 +558,10 @@ public class MainRepository {
                 .collection("orders")
                 .add(orderData)
                 .onSuccessTask(documentReference -> {
+                    String orderId = documentReference.getId();
                     clearCart(userId);
-                    return Tasks.forResult(documentReference.getId());
+                    return saveNotification(userId, orderId)
+                            .onSuccessTask(aVoid -> Tasks.forResult(orderId));
                 });
     }
 
@@ -603,5 +636,120 @@ public class MainRepository {
         return firestore.collection("users").document(userId)
                 .collection("orders").document(orderId)
                 .delete();
+    }
+
+    public Task<Void> clearOrderHistory(String userId) {
+        if (userId == null) {
+            return Tasks.forException(new IllegalArgumentException("UserID không hợp lệ"));
+        }
+
+        // Lấy tham chiếu đến collection orders của user
+        CollectionReference userOrdersRef = firestore.collection("users")
+                .document(userId)
+                .collection("orders");
+
+        // Lấy tất cả các Document đơn hàng
+        return userOrdersRef.get().onSuccessTask(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots.isEmpty()) {
+                return Tasks.forResult(null); // Không có gì để xóa
+            }
+            // Tạo một WriteBatch
+            WriteBatch batch = firestore.batch();
+
+            // Lặp qua tất cả document và thêm lệnh xóa vào batch
+            for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                batch.delete(ds.getReference());
+            }
+
+            return batch.commit();
+        });
+    }
+
+    private Task<Boolean> isNotificationEnabled(String userId) {
+        if (userId == null) {
+            return Tasks.forResult(false);
+        }
+
+        return firestore.collection("users").document(userId).get()
+                .onSuccessTask(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Boolean isEnabled = documentSnapshot.getBoolean("isNotificationEnabled");
+                        return Tasks.forResult(isEnabled != null ? isEnabled : true);
+                    }
+                    return Tasks.forResult(true);
+                });
+    }
+
+    private Task<Void> saveNotification(String userId, String orderId) {
+        return isNotificationEnabled(userId).onSuccessTask(isEnabled -> {
+            if (!isEnabled) {
+                // Nếu thông báo bị TẮT, DỪNG LẠI
+                return Tasks.forResult(null);
+            }
+
+            Map<String, Object> notificationData = new HashMap<>();
+            notificationData.put("title", "Đặt hàng thành công!");
+            notificationData.put("message", "Đơn hàng #" + orderId + " đã được đặt và đang được chuẩn bị.");
+            notificationData.put("time", FieldValue.serverTimestamp());
+            notificationData.put("isRead", false);
+
+            return firestore.collection("users").document(userId)
+                    .collection("notifications")
+                    .add(notificationData)
+                    .onSuccessTask(documentReference -> Tasks.forResult(null));
+        });
+    }
+
+    public LiveData<ArrayList<NotificationItem>> fetchNotifications(String userId) {
+        MutableLiveData<ArrayList<NotificationItem>> notificationsLiveData = new MutableLiveData<>();
+
+        if (userId == null) {
+            notificationsLiveData.setValue(new ArrayList<>());
+            return notificationsLiveData;
+        }
+
+        firestore.collection("users").document(userId)
+                .collection("notifications")
+                .orderBy("time", Query.Direction.DESCENDING)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        notificationsLiveData.setValue(new ArrayList<>());
+                        return;
+                    }
+
+                    ArrayList<NotificationItem> notificationList = new ArrayList<>();
+                    if (queryDocumentSnapshots != null) {
+                        for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                            NotificationItem item = ds.toObject(NotificationItem.class);
+                            if (item != null) {
+                                notificationList.add(item);
+                            }
+                        }
+                    }
+                    notificationsLiveData.setValue(notificationList);
+                });
+
+        return notificationsLiveData;
+    }
+
+
+    public Task<Void> clearAllNotifications(String userId) {
+        if (userId == null) {
+            return Tasks.forException(new IllegalArgumentException("UserID không hợp lệ"));
+        }
+        CollectionReference userOrdersRef = firestore.collection("users")
+                .document(userId)
+                .collection("notifications");
+
+        return userOrdersRef.get().onSuccessTask(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots.isEmpty()) {
+                return Tasks.forResult(null);
+            }
+            WriteBatch batch = firestore.batch();
+            for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                batch.delete(ds.getReference());
+            }
+            return batch.commit();
+        });
     }
 }

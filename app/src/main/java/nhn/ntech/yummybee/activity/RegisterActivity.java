@@ -157,7 +157,8 @@ public class RegisterActivity extends AppCompatActivity {
                             birthday,
                             selectedBirthdayMillis,
                             gender,
-                            city
+                            city,
+                            true
                     );
 
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
