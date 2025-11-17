@@ -3,6 +3,7 @@ package nhn.ntech.yummybee.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
     public interface OnAddressSelectedListener {
         void onAddressSelected(AddressItem address);
+        void onDeleteAddress(AddressItem address);
     }
 
     public AddressAdapter(ArrayList<AddressItem> addressItems, OnAddressSelectedListener listener) {
@@ -58,6 +60,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
                 listener.onAddressSelected(item);
             }
         });
+
+        holder.imgBtnDelete.setOnClickListener(v->{
+            if (listener != null) {
+                listener.onDeleteAddress(item);
+            }
+        });
     }
 
     public void setAddresses(ArrayList<AddressItem> newAddresses) {
@@ -72,11 +80,13 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtFullNameAndPhone, txtFullAddress, txtDefaultBadge;
+        private ImageButton imgBtnDelete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtFullNameAndPhone = itemView.findViewById(R.id.txtFullNameAndPhone);
             txtFullAddress = itemView.findViewById(R.id.txtFullAddress);
             txtDefaultBadge = itemView.findViewById(R.id.txtDefaultBadge);
+            imgBtnDelete = itemView.findViewById(R.id.imgBtnDelete);
         }
     }
 }

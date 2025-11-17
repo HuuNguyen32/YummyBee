@@ -28,10 +28,25 @@
         android:layout_marginTop="4dp"
         android:textColor="@color/neutral_600"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@id/imgBtnDelete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtFullNameAndPhone"
         tools:text="123 Đường ABC, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh" />
+
+
+    <ImageButton
+        android:id="@+id/imgBtnDelete"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/baseline_delete_24"
+        android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtFullAddress"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtDefaultBadge"

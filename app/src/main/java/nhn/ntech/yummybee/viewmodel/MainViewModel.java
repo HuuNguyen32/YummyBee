@@ -77,6 +77,11 @@ public class MainViewModel extends ViewModel {
         return _notificationClearStatus;
     }
 
+    private final MutableLiveData<Boolean> _addressDeleteStatus = new MutableLiveData<>();
+    public LiveData<Boolean> getAddressDeleteStatus() {
+        return _addressDeleteStatus;
+    }
+
     public void clearFavourite() {
         String userId = getUserId();
         if (userId != null){
@@ -147,7 +152,6 @@ public class MainViewModel extends ViewModel {
     public LiveData<ArrayList<OrderItem>> loadOrderHistory() {
         String userId = getUserId();
         if (userId == null) {
-            // Nếu chưa đăng nhập, trả về danh sách rỗng
             return new MutableLiveData<>(new ArrayList<>());
         }
         return repository.fetchOrderHistory(userId);
@@ -174,7 +178,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateAddress(String addressId, AddressItem addressData) {
-        String userId = getUserId(); // (Hàm getUserId() bạn đã có)
+        String userId = getUserId();
         if (userId == null) {
             _addressSaveStatus.setValue(false); // Thất bại (chưa đăng nhập)
             return;
@@ -187,7 +191,7 @@ public class MainViewModel extends ViewModel {
         updates.put("ward", addressData.getWard());
         updates.put("district", addressData.getDistrict());
         updates.put("city", addressData.getCity());
-        updates.put("default", addressData.isDefault()); // Cập nhật trạng thái mặc định
+        updates.put("isDefault", addressData.isDefault()); // Cập nhật trạng thái mặc định
 
 
         repository.updateAddress(userId, addressId, updates)
@@ -199,6 +203,26 @@ public class MainViewModel extends ViewModel {
                     // Cập nhật thất bại
                     _addressSaveStatus.setValue(false);
                 });
+    }
+
+    public void deleteAddress(String addressId) {
+        String userId = getUserId();
+        if (userId == null) {
+            _addressDeleteStatus.setValue(false);
+            return;
+        }
+
+        repository.deleteAddress(userId, addressId)
+                .addOnSuccessListener(aVoid -> {
+                    _addressDeleteStatus.setValue(true); // Xóa thành công
+                })
+                .addOnFailureListener(e -> {
+                    _addressDeleteStatus.setValue(false); // Xóa thất bại
+                });
+    }
+
+    public void resetAddressDeleteStatus() {
+        _addressDeleteStatus.setValue(null);
     }
 
     public LiveData<ArrayList<AddressItem>> loadAddresses() {

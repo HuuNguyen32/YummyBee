@@ -473,11 +473,11 @@ public class MainRepository {
         firestore.collection("users")
                 .document(userId)
                 .collection("addresses")
-                .orderBy("isDefault", Query.Direction.DESCENDING) // Mặc định (true) lên đầu
+                .orderBy("isDefault", Query.Direction.DESCENDING)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
                         addressesLiveData.setValue(new ArrayList<>());
-                        return; // Lỗi
+                        return;
                     }
 
                     ArrayList<AddressItem> addressList = new ArrayList<>();
@@ -485,7 +485,7 @@ public class MainRepository {
                         for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
                             AddressItem item = ds.toObject(AddressItem.class);
                             if (item != null) {
-                                item.setId(ds.getId()); // Gán ID Document
+                                item.setId(ds.getId());
                                 addressList.add(item);
                             }
                         }
@@ -496,25 +496,66 @@ public class MainRepository {
         return addressesLiveData;
     }
 
-    public Task<DocumentReference> addNewAddress(String userId, AddressItem address) {
+    private Task<Void> unsetOldDefaults(String userId, WriteBatch batch) {
+        CollectionReference addressesRef = firestore.collection("users").document(userId).collection("addresses");
+        Query oldDefaultsQuery = addressesRef.whereEqualTo("isDefault", true);
 
-        // Thêm đối tượng 'address' vào sub-collection 'addresses'
-        return firestore.collection("users")
-                .document(userId)
-                .collection("addresses")
-                .add(address);
+        return oldDefaultsQuery.get().onSuccessTask(queryDocumentSnapshots -> {
+            for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                batch.update(doc.getReference(), "isDefault", false);
+            }
+            return Tasks.forResult(null);
+        });
+    }
+
+    public Task<Void> addNewAddress(String userId, AddressItem address) {
+        if (userId == null || address == null) {
+            return Tasks.forException(new IllegalArgumentException("Dữ liệu không hợp lệ"));
+        }
+
+        DocumentReference newAddressRef = firestore.collection("users").document(userId).collection("addresses").document();
+        WriteBatch batch = firestore.batch();
+
+        if (address.isDefault()) {
+            return unsetOldDefaults(userId, batch).onSuccessTask(aVoid -> {
+                batch.set(newAddressRef, address);
+                return batch.commit();
+            });
+        } else {
+            return firestore.collection("users").document(userId).collection("addresses").add(address).onSuccessTask(documentReference -> Tasks.forResult(null));
+        }
     }
 
     public Task<Void> updateAddress(String userId, String addressId, Map<String, Object> updates) {
-        if (userId == null || addressId == null || updates == null || updates.isEmpty()) {
-            // Trả về một Task thất bại ngay lập tức nếu thiếu thông tin
-            return Tasks.forException(new IllegalArgumentException("UserID, AddressID, hoặc dữ liệu cập nhật bị rỗng"));
+        if (userId == null || addressId == null || updates == null) {
+            return Tasks.forException(new IllegalArgumentException("Dữ liệu cập nhật không hợp lệ"));
         }
 
-        // Dùng .update() để cập nhật các trường trong Map
+        DocumentReference currentAddressRef = firestore.collection("users").document(userId)
+                .collection("addresses").document(addressId);
+
+        Boolean isSettingDefault = (Boolean) updates.get("isDefault");
+
+        if (isSettingDefault != null && isSettingDefault) {
+            WriteBatch batch = firestore.batch();
+
+            return unsetOldDefaults(userId, batch).onSuccessTask(aVoid -> {
+                batch.update(currentAddressRef, updates);
+                return batch.commit();
+            });
+
+        } else {
+            return currentAddressRef.update(updates);
+        }
+    }
+
+    public Task<Void> deleteAddress(String userId, String addressId) {
+        if (userId == null || addressId == null) {
+            return Tasks.forException(new IllegalArgumentException("UserID hoặc AddressID không hợp lệ"));
+        }
         return firestore.collection("users").document(userId)
                 .collection("addresses").document(addressId)
-                .update(updates);
+                .delete();
     }
 
 

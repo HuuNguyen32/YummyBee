@@ -122,4 +122,5 @@
     <string name="notification_message">Cảm ơn bạn đã tin tưởng dịch vụ giao hàng của YummyBee. Chúc bạn ngon miệng!</string>
     <string name="notification_title">Đơn hàng đã giao thành công!</string>
     <string name="notification_time">10:30 - 20/12</string>
+    <string name="delete">Xóa</string>
 </resources>

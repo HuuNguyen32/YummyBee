@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -52,6 +54,7 @@ public class DetailFoodActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ActivityResultLauncher<Intent> loginLauncher;
     private Runnable pendingAction = null;
+    private SharedViewModel sharedViewModel;
     private boolean isUserTriggeredFavoriteChange = false;
 
 
@@ -64,6 +67,7 @@ public class DetailFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_food);
         mapping();
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         mAuth = FirebaseAuth.getInstance();
         // Nút back
         btnBack.setOnClickListener(view -> finish());
@@ -115,29 +119,23 @@ public class DetailFoodActivity extends AppCompatActivity {
         txtFoodDescription.setText(foodItem.getDescription());
         txtTotalPrice.setText(String.format(Locale.getDefault(), "%,d đ", foodItem.getPrice()));
 
-        imgAddQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentQuantity = getQuantity(edtQuantity);
-                currentQuantity++;
-                edtQuantity.setText(String.valueOf(currentQuantity));
-                updateTotalPrice(currentQuantity, foodItem.getPrice());
-            }
+        imgAddQuantity.setOnClickListener(view -> {
+            int currentQuantity = getQuantity(edtQuantity);
+            currentQuantity++;
+            edtQuantity.setText(String.valueOf(currentQuantity));
+            updateTotalPrice(currentQuantity, foodItem.getPrice());
         });
 
-        imgMinusQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentQuantity = getQuantity(edtQuantity);
-                if (currentQuantity > 1) {
-                    currentQuantity--;
-                    edtQuantity.setText(String.valueOf(currentQuantity));
-                    updateTotalPrice(currentQuantity, foodItem.getPrice());
-                } else {
-                    Toast.makeText(DetailFoodActivity.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
-                }
-
+        imgMinusQuantity.setOnClickListener(view -> {
+            int currentQuantity = getQuantity(edtQuantity);
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                edtQuantity.setText(String.valueOf(currentQuantity));
+                updateTotalPrice(currentQuantity, foodItem.getPrice());
+            } else {
+                Toast.makeText(DetailFoodActivity.this, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -180,18 +178,43 @@ public class DetailFoodActivity extends AppCompatActivity {
         btnAddToCart.setOnClickListener(v -> {
             if (currentFoodItem == null) return;
 
+            // Định nghĩa hành động AddToCart
+            Runnable addToCartAction = () -> {
+                int quantity = getQuantity(edtQuantity);
+                mainViewModel.addToCart(currentFoodItem, quantity);
+                Toast.makeText(DetailFoodActivity.this, "Đã thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
+            };
+
             if (mAuth.getCurrentUser() == null) {
-                showLoginPrompt(pendingAction);
+                showLoginPrompt(addToCartAction);
                 return;
             }
 
-            int quantity = getQuantity(edtQuantity);
-            mainViewModel.addToCart(currentFoodItem, quantity);
-            Toast.makeText(DetailFoodActivity.this, "Đã thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
+            addToCartAction.run();
         });
 
         btnBuyNow.setOnClickListener(v -> {
-            // (Tương tự như AddToCart, nhưng sau đó điều hướng đến CartActivity)
+            if (currentFoodItem == null) return;
+
+            Runnable buyNowAction = () -> {
+                int quantity = getQuantity(edtQuantity);
+
+                mainViewModel.addToCart(currentFoodItem, quantity);
+
+                Intent intent = new Intent(DetailFoodActivity.this, MainActivity.class);
+                intent.putExtra("navigateToCart", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                Toast.makeText(DetailFoodActivity.this, "Đang chuyển đến Giỏ hàng...", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+                finish();
+            };
+
+            if (mAuth.getCurrentUser() == null) {
+                showLoginPrompt(buyNowAction);
+                return;
+            }
+
+            buyNowAction.run();
         });
     }
 

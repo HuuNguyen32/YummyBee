@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import nhn.ntech.yummybee.R;
 import nhn.ntech.yummybee.adapter.AddressAdapter;
 import nhn.ntech.yummybee.model.AddressItem;
+import nhn.ntech.yummybee.utils.DialogUtils;
 import nhn.ntech.yummybee.viewmodel.MainViewModel;
 
 public class AddressActivity extends AppCompatActivity implements AddressAdapter.OnAddressSelectedListener {
@@ -64,9 +68,9 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
 
         setupToolbar();
         initRecyclerView();
-        // Bắt đầu lắng nghe dữ liệu
         observeAddressList();
         setupAddNewAddressButton();
+        observeDeleteStatus();
     }
 
     private void setupAddNewAddressButton() {
@@ -95,6 +99,21 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
             }
         });
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getMenuInflater().inflate(R.menu.single_delete_address_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.nav_delete_single){
+
+        }
+        return super.onContextItemSelected(item);
+    }
+
 
 
     private void setupToolbar() {
@@ -126,5 +145,29 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
             intent.putExtra("ADDRESS_TO_EDIT", address);
             addOrEditAddressLauncher.launch(intent);
         }
+    }
+
+    @Override
+    public void onDeleteAddress(AddressItem address) {
+        DialogUtils.showCustomDialogBox(this,
+                "Xóa địa chỉ này?",
+                "Bạn có chắc muốn xóa địa chỉ: " + address.getStreet() + "?",
+                false,
+                () -> {
+                    mainViewModel.deleteAddress(address.getId());
+                });
+    }
+
+    private void observeDeleteStatus() {
+        mainViewModel.getAddressDeleteStatus().observe(this, isSuccess -> {
+            if (isSuccess == null) return;
+
+            if (isSuccess) {
+                Toast.makeText(this, "Đã xóa địa chỉ thành công.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Xóa thất bại. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+            }
+            mainViewModel.resetAddressDeleteStatus();
+        });
     }
 }

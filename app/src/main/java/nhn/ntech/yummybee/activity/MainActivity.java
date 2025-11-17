@@ -2,9 +2,11 @@ package nhn.ntech.yummybee.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
@@ -46,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter = new ViewPagerAdapter(this);
         mainViewPager.setAdapter(viewPagerAdapter);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
         sharedViewModel.getTriggerOrderTab().observe(this, result -> {
             if (result != null && result) {
-                mainViewPager.setCurrentItem(1, true); // chuyển sang tab Order
+                mainViewPager.setCurrentItem(1, true);
                 sharedViewModel.resetTrigger(); // reset để tránh lặp lại
             }
         });
@@ -106,6 +109,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        boolean goToCart = intent.getBooleanExtra("navigateToCart", false);
+        if (goToCart) {
+            mainViewPager.setCurrentItem(2, true);
+            bottomNavigationView.setSelectedItemId(R.id.navCart);
+        }
+
+    }
 
     private void mapping(){
         mainViewPager = findViewById(R.id.mainViewPager);
