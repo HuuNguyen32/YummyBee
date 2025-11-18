@@ -105,50 +105,47 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnCategory
         super.onResume();
         txtDrawerUsername.setText(userSessionManager.getFullName());
         txtDrawerEmail.setText(userSessionManager.getEmail());
-        txtUsername.setText("Xin chào "+userSessionManager.getLastName());
+        txtUsername.setText(getString(R.string.greeting_prefix)+userSessionManager.getLastName());
     }
 
     private void setupDrawerListener() {
         navigationView.setCheckedItem(R.id.nav_home);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.nav_home){
-                    // Mặc định là về trang home
-                } else if (id == R.id.nav_settings) {
-                    Intent intent = new Intent(requireActivity(), SettingActivity.class);
-                    startActivity(intent);
-                    homeDrawerLayout.closeDrawers();
-                    return false;
-                } else if (id == R.id.nav_history) {
-                    Intent intent = new Intent(requireActivity(), OrderHistoryActivity.class);
-                    startActivity(intent);
-                    homeDrawerLayout.closeDrawers();
-                    return false;
-                } else if (id == R.id.nav_share) {
-                    homeDrawerLayout.closeDrawers();
-                    return false;
-                } else if (id == R.id.nav_about) {
-                    Intent intent = new Intent(requireActivity(), AboutUsActivity.class);
-                    startActivity(intent);
-                    homeDrawerLayout.closeDrawers();
-                    return false;
-                } else if (id == R.id.nav_logout) {
-                    DialogUtils.showCustomDialogBox(requireActivity(), getString(R.string.app_name),"Bạn chắc chắn muốn đăng xuất?", false, () ->{
-                        authViewModel.logout();
-                        userSessionManager.clearSession();
-                        updateDrawerMenu();
-                        navToLoginScreen();
-                    });
-                    return false;
-                } else if (id == R.id.nav_login) {
-                    navToLoginScreen();
-                }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home){
+                // Mặc định là về trang home
+            } else if (id == R.id.nav_settings) {
+                Intent intent = new Intent(requireActivity(), SettingActivity.class);
+                startActivity(intent);
                 homeDrawerLayout.closeDrawers();
-
-                return true;
+                return false;
+            } else if (id == R.id.nav_history) {
+                Intent intent = new Intent(requireActivity(), OrderHistoryActivity.class);
+                startActivity(intent);
+                homeDrawerLayout.closeDrawers();
+                return false;
+            } else if (id == R.id.nav_share) {
+                homeDrawerLayout.closeDrawers();
+                return false;
+            } else if (id == R.id.nav_about) {
+                Intent intent = new Intent(requireActivity(), AboutUsActivity.class);
+                startActivity(intent);
+                homeDrawerLayout.closeDrawers();
+                return false;
+            } else if (id == R.id.nav_logout) {
+                DialogUtils.showCustomDialogBox(requireActivity(), getString(R.string.app_name),getString(R.string.logout_confirm_message), false, () ->{
+                    authViewModel.logout();
+                    userSessionManager.clearSession();
+                    updateDrawerMenu();
+                    navToLoginScreen();
+                });
+                return false;
+            } else if (id == R.id.nav_login) {
+                navToLoginScreen();
             }
+            homeDrawerLayout.closeDrawers();
+
+            return true;
         });
     }
 
@@ -173,23 +170,17 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnCategory
     }
 
     private void navigateToSearchActivity(){
-        edtHomeSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireActivity(), SearchActivity.class);
-                startActivity(intent);
+        edtHomeSearch.setOnClickListener(view -> {
+            Intent intent = new Intent(requireActivity(), SearchActivity.class);
+            startActivity(intent);
 
-            }
         });
     }
 
     private void seeAllFoods(){
-        txtSeeAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               sharedViewModel.setSelectedCategoryId(null);
-               sharedViewModel.triggerOrderTab();
-            }
+        txtSeeAll.setOnClickListener(view -> {
+           sharedViewModel.setSelectedCategoryId(null);
+           sharedViewModel.triggerOrderTab();
         });
     }
 
@@ -328,7 +319,7 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnCategory
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             // Đã đăng nhập -> Thêm vào giỏ hàng
             mainViewModel.addToCart(foodItem, 1);
-            Toast.makeText(requireActivity(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
         } else {
             // Chưa đăng nhập -> Yêu cầu đăng nhập
             showLoginPrompt();
@@ -336,8 +327,7 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnCategory
     }
 
     private void showLoginPrompt() {
-        Toast.makeText(requireContext(), "Vui lòng đăng nhập để thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
-        // (Bạn nên dùng ActivityResultLauncher ở đây)
+        Toast.makeText(requireContext(), getString(R.string.login_required_to_add_cart), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(requireActivity(), LoginActivity.class);
         startActivity(intent);
     }

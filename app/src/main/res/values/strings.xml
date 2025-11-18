@@ -123,4 +123,31 @@
     <string name="notification_title">Đơn hàng đã giao thành công!</string>
     <string name="notification_time">10:30 - 20/12</string>
     <string name="delete">Xóa</string>
+    <string name="error_empty_fields">Vui lòng nhập đầy đủ thông tin</string>
+    <string name="error_name_length">Họ và tên phải có ít nhất 2 ký tự</string>
+    <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="error_password_length">Mật khẩu phải có ít nhất 6 ký tự</string>
+    <string name="error_invalid_phone">Số điện thoại không hợp lệ</string>
+    <string name="error_select_birthday">Vui lòng chọn ngày sinh</string>
+    <string name="error_underage">Bạn phải đủ 12 tuổi để đăng ký tài khoản.</string>
+    <string name="error_terms_unchecked">Bạn phải đồng ý với điều khoản bảo mật</string>
+    <string name="register_success">Đăng ký thành công!</string>
+    <string name="birthday_picker_title">Chọn ngày sinh</string>
+    <string name="address_updated">Đã cập nhật danh sách</string>
+    <string name="delete_address_title">Xóa địa chỉ này?</string>
+    <string name="delete_address_message">Bạn có chắc muốn xóa địa chỉ: %1$s?</string>
+    <string name="delete_success">Đã xóa địa chỉ thành công.</string>
+    <string name="delete_failed">Xóa thất bại. Vui lòng thử lại.</string>
+    <string name="update_success">Cập nhật thành công!</string>
+    <string name="update_failed">Cập nhật thất bại. Vui lòng thử lại.</string>
+    <string name="greeting_prefix">Xin chào</string>
+    <string name="logout_confirm_message">Bạn chắc chắn muốn đăng xuất?</string>
+    <string name="added_to_cart">Đã thêm vào giỏ hàng</string>
+    <string name="login_required_to_add_cart">Vui lòng đăng nhập để thêm vào giỏ hàng</string>
+    <string name="login_success">Đăng nhập thành công</string>
+    <string name="login_failed">Đăng nhập thất bại</string>
+    <string name="email_required">Email không được để trống</string>
+    <string name="password_required">Mật khẩu không được để trống</string>
+
+
 </resources>

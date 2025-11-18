@@ -96,77 +96,65 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setBtnLogin(){
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = Objects.requireNonNull(edtEmail.getText()).toString().trim();
-                String password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
-                authViewModel.login(email, password, new AuthViewModel.AuthCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        mainViewModel.loadUserInfo(email).observe(LoginActivity.this, userItem -> {
-                            if (userItem!=null){
-                                userSessionManager.saveUserInfo(
-                                        userItem.getFirstName(),
-                                        userItem.getLastName(),
-                                        userItem.getEmail(),
-                                        userItem.getPhoneNumber(),
-                                        userItem.getBirthday(),
-                                        userItem.getBirthdayMillis(),
-                                        userItem.getGender(),
-                                        userItem.getCity(),
-                                        userItem.isNotificationEnabled()
-                                );
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                            }
-                        });
+        btnLogin.setOnClickListener(view -> {
+            String email = Objects.requireNonNull(edtEmail.getText()).toString().trim();
+            String password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
+            authViewModel.login(email, password, new AuthViewModel.AuthCallBack() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                    mainViewModel.loadUserInfo(email).observe(LoginActivity.this, userItem -> {
+                        if (userItem!=null){
+                            userSessionManager.saveUserInfo(
+                                    userItem.getFirstName(),
+                                    userItem.getLastName(),
+                                    userItem.getEmail(),
+                                    userItem.getPhoneNumber(),
+                                    userItem.getBirthday(),
+                                    userItem.getBirthdayMillis(),
+                                    userItem.getGender(),
+                                    userItem.getCity(),
+                                    userItem.isNotificationEnabled()
+                            );
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
 
-                    }
+                }
 
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
     private void setTxtRegister(){
-        txtRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        txtRegister.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
     }
 
     private void setTxtForgotPassword(){
-        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        txtForgotPassword.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
     }
 
     private void setBtnNonLogin(){
-        btnNonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
+        btnNonLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
     }
 

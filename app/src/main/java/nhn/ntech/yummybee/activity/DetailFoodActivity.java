@@ -78,7 +78,7 @@ public class DetailFoodActivity extends AppCompatActivity {
                     // HÀM NÀY CHẠY KHI LOGINACTIVITY ĐÓNG LẠI
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         // Người dùng vừa đăng nhập thành công!
-                        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
 
                         // Cập nhật lại Auth
                         mAuth = FirebaseAuth.getInstance();

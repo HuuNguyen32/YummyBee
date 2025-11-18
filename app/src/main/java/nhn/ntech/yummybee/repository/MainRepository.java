@@ -365,7 +365,7 @@ public class MainRepository {
             return; // Không thể thêm món ăn không có ID
         }
 
-        // 1. Tìm xem món này đã có trong giỏ hàng chưa (dựa trên food_id)
+        // Tìm xem món này đã có trong giỏ hàng chưa dựa trên food_id
         Query query = firestore.collection("users").document(userId).collection("cart")
                 .whereEqualTo("food_id", foodItem.getId())
                 .limit(1);
@@ -407,10 +407,10 @@ public class MainRepository {
                 .collection("cart").document(cartItemId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    // (Tùy chọn: log thành công)
+
                 })
                 .addOnFailureListener(e -> {
-                    // (Tùy chọn: log lỗi)
+
                 });
     }
 
@@ -423,16 +423,14 @@ public class MainRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.isEmpty()) return; // Không có gì để xóa
 
-                    // 1. Tạo một WriteBatch
                     WriteBatch batch = firestore.batch();
 
-                    // 2. Lặp qua tất cả document và thêm lệnh xóa vào batch
                     for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
                         batch.delete(ds.getReference());
                     }
 
                     batch.commit().addOnSuccessListener(aVoid -> {
-                        // (Tùy chọn: log xóa thành công)
+
                     });
                 });
     }

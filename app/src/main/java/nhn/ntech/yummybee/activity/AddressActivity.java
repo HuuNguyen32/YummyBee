@@ -61,7 +61,7 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Toast.makeText(this, "Đã cập nhật danh sách", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.address_updated), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -150,8 +150,8 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
     @Override
     public void onDeleteAddress(AddressItem address) {
         DialogUtils.showCustomDialogBox(this,
-                "Xóa địa chỉ này?",
-                "Bạn có chắc muốn xóa địa chỉ: " + address.getStreet() + "?",
+                getString(R.string.delete_address_title),
+                getString(R.string.delete_address_message, address.getStreet()),
                 false,
                 () -> {
                     mainViewModel.deleteAddress(address.getId());
@@ -163,9 +163,9 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
             if (isSuccess == null) return;
 
             if (isSuccess) {
-                Toast.makeText(this, "Đã xóa địa chỉ thành công.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Xóa thất bại. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
             }
             mainViewModel.resetAddressDeleteStatus();
         });

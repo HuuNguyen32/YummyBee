@@ -22,6 +22,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -75,16 +76,11 @@ public class RegisterActivity extends AppCompatActivity {
         session = new UserSessionManager(this);
 
         // Setup Dropdowns
-        genders = List.of("Nam", "Nữ");
+        genders = Arrays.asList(getResources().getStringArray(R.array.gender_options));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, genders);
         genderDropdown.setAdapter(adapter);
 
-        cities = List.of(
-                "Hà Nội", "Hải Phòng", "Hà Giang", "Cao Bằng", "Bắc Kạn", "Tuyên Quang", "Lào Cai", "Yên Bái",
-                "Thái Nguyên", "Phú Thọ", "Bắc Giang", "Quảng Ninh", "Lạng Sơn",
-                "Bắc Ninh", "Hà Nam", "Hải Dương", "Hưng Yên", "Nam Định", "Ninh Bình", "Thái Bình", "Vĩnh Phúc",
-                "Thanh Hóa"
-        );
+        cities = Arrays.asList(getResources().getStringArray(R.array.city_options));
         ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities);
         cityDropdown.setAdapter(cityAdapter);
 
@@ -119,28 +115,39 @@ public class RegisterActivity extends AppCompatActivity {
             if (firstname.isEmpty() || lastname.isEmpty() || phone.isEmpty() || email.isEmpty()
                     || password.isEmpty() || confirmPassword.isEmpty() || birthday.isEmpty()
                     || gender.isEmpty() || city.isEmpty()){
-                Toast.makeText(RegisterActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_empty_fields), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (firstname.length() < 2 || lastname.length() < 2){
-                Toast.makeText(RegisterActivity.this, "Họ và tên phải có ít nhất 2 ký tự", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_name_length), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!isValidEmail(email)){
-                Toast.makeText(RegisterActivity.this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (password.length() < 6){
-                Toast.makeText(RegisterActivity.this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_password_length), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!isValidPhoneNumber(phone)){
-                Toast.makeText(RegisterActivity.this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_invalid_phone), Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            if(selectedBirthdayMillis == null){
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_select_birthday), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!isAdult(selectedBirthdayMillis)) {
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_underage), Toast.LENGTH_LONG).show();
+                return;
+            }
+
             // Kiểm tra Checkbox
             if (!securityCheckbox.isChecked()) {
-                Toast.makeText(RegisterActivity.this, "Bạn phải đồng ý với điều khoản bảo mật", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, getString(R.string.error_terms_unchecked), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -148,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
             authViewModel.register(firstname, lastname, email, password, confirmPassword, phone, birthday, selectedBirthdayMillis, gender, city, new AuthViewModel.AuthCallBack() {
                 @Override
                 public void onSuccess() {
-                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, getString(R.string.register_success), Toast.LENGTH_SHORT).show();
                     session.saveUserInfo(
                             firstname,
                             lastname,
@@ -175,6 +182,22 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    public static boolean isAdult(long birthdayMillis) {
+        final int MINIMUM_AGE = 12;
+
+        Calendar dob = Calendar.getInstance();
+        dob.setTimeInMillis(birthdayMillis);
+
+        Calendar today = Calendar.getInstance();
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        return age >= MINIMUM_AGE;
+    }
+
     public boolean isValidEmail(String email) {
         if (email == null) return false;
         return EMAIL_PATTERN.matcher(email).matches();
@@ -191,7 +214,7 @@ public class RegisterActivity extends AppCompatActivity {
                 : MaterialDatePicker.todayInUtcMilliseconds();
 
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Chọn ngày sinh")
+                .setTitleText(getString(R.string.birthday_picker_title))
                 .setSelection(defaultSelection)
                 .build();
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender_options">
+        <item>Nam</item>
+        <item>Nữ</item>
+    </string-array>
+
+    <string-array name="city_options">
+        <item>Hà Nội</item>
+        <item>Hải Phòng</item>
+        <item>Hà Giang</item>
+        <item>Cao Bằng</item>
+        <item>Bắc Kạn</item>
+        <item>Tuyên Quang</item>
+        <item>Lào Cai</item>
+        <item>Yên Bái</item>
+        <item>Thái Nguyên</item>
+        <item>Phú Thọ</item>
+        <item>Bắc Giang</item>
+        <item>Quảng Ninh</item>
+        <item>Lạng Sơn</item>
+        <item>Bắc Ninh</item>
+        <item>Hà Nam</item>
+        <item>Hải Dương</item>
+        <item>Hưng Yên</item>
+        <item>Nam Định</item>
+        <item>Ninh Bình</item>
+        <item>Thái Bình</item>
+        <item>Vĩnh Phúc</item>
+        <item>Thanh Hóa</item>
+    </string-array>
+
+</resources>

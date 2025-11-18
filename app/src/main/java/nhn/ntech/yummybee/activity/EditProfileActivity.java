@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,16 +68,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void setUpDropDown() {
         // Setup Dropdowns
-        genders = List.of("Nam", "Nữ");
+        genders = Arrays.asList(getResources().getStringArray(R.array.gender_options));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, genders);
         genderDropdown.setAdapter(adapter);
 
-        cities = List.of(
-                "Hà Nội", "Hải Phòng", "Hà Giang", "Cao Bằng", "Bắc Kạn", "Tuyên Quang", "Lào Cai", "Yên Bái",
-                "Thái Nguyên", "Phú Thọ", "Bắc Giang", "Quảng Ninh", "Lạng Sơn",
-                "Bắc Ninh", "Hà Nam", "Hải Dương", "Hưng Yên", "Nam Định", "Ninh Bình", "Thái Bình", "Vĩnh Phúc",
-                "Thanh Hóa"
-        );
+        cities = Arrays.asList(getResources().getStringArray(R.array.city_options));
         ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities);
         cityDropdown.setAdapter(cityAdapter);
     }
@@ -112,7 +108,12 @@ public class EditProfileActivity extends AppCompatActivity {
             String city = cityDropdown.getText().toString().trim();
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty() || birthday.isEmpty() || gender.isEmpty() || city.isEmpty()) {
-                Toast.makeText(EditProfileActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, getString(R.string.error_empty_fields), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!RegisterActivity.isAdult(selectedBirthdayMillis)){
+                Toast.makeText(EditProfileActivity.this, getString(R.string.error_underage), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -151,13 +152,13 @@ public class EditProfileActivity extends AppCompatActivity {
                         userSessionManager.getNotificationEnabled()
                 );
 
-                Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
                 mainViewModel.resetProfileUpdateStatus(); // Reset lại
                 finish(); // Đóng màn hình Edit
 
             } else {
                 // CẬP NHẬT FIRESTORE THẤT BẠI
-                Toast.makeText(this, "Cập nhật thất bại. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.update_failed), Toast.LENGTH_SHORT).show();
 
                 // Bật lại nút
                 btnUpdate.setEnabled(true);
@@ -173,7 +174,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 : MaterialDatePicker.todayInUtcMilliseconds();
 
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Chọn ngày sinh")
+                .setTitleText(getString(R.string.birthday_picker_title))
                 .setSelection(defaultSelection)
                 .build();
 
