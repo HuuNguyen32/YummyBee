@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnCategory
         super.onResume();
         txtDrawerUsername.setText(userSessionManager.getFullName());
         txtDrawerEmail.setText(userSessionManager.getEmail());
-        txtUsername.setText(getString(R.string.greeting_prefix)+userSessionManager.getLastName());
+        txtUsername.setText(getString(R.string.greeting_prefix)+" "+userSessionManager.getLastName());
     }
 
     private void setupDrawerListener() {
