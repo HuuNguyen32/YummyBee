@@ -20,13 +20,15 @@
     <td colspan="4">
       2. Các thành phần dữ liệu cốt lõi (POJOs)<br>
       - Dữ liệu được tổ chức tại các Root Collection và Sub-collection: <br>
-        +> UserItem: Lưu trữ hồ sơ người dùng. <br>
-        +> FoodItem: Thông tin sản phẩm. <br>
-        +> CategoryItem: Danh mục sản phẩm. <br>
-        +> NotificationItem: Thông báo hệ thống. <br>
-        +> CartItem: Mô hình cho các món hàng trong Giỏ hàng (dùng để cache dữ liệu).<br>
-        +> AddressItem: Mô hình cho địa chỉ giao hàng (dùng để quản lý Địa chỉ Mặc định).<br>
-        +> OrderItem: Mô hình cho đơn hàng đã đặt (lưu trữ tóm tắt và mảng items đã đặt).<br>
+       <ul>
+          <li><b>UserItem</b>: Lưu trữ hồ sơ người dùng.</li>
+          <li><b>FoodItem</b>: Thông tin sản phẩm.</li>
+          <li><b>CategoryItem</b>: Danh mục sản phẩm.</li>
+          <li><b>NotificationItem</b>: Thông báo hệ thống.</li>
+          <li><b>CartItem</b>: Mô hình cho các món hàng trong Giỏ hàng (dùng để cache dữ liệu).</li>
+          <li><b>AddressItem</b>: Mô hình cho địa chỉ giao hàng (dùng để quản lý Địa chỉ Mặc định).</li>
+          <li><b>OrderItem</b>: Mô hình cho đơn hàng đã đặt (lưu trữ tóm tắt và mảng items đã đặt).</li>
+       </ul>
     </td>
   </tr>
   <tr>
