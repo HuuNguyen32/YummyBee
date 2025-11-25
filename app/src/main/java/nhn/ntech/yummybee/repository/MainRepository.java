@@ -49,10 +49,10 @@ public class MainRepository {
                         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
 
                         for (DocumentSnapshot ds : documents) {
-                            // 1. Ánh xạ Document sang POJO
+                            // Ánh xạ Document sang POJO
                             CategoryItem category = ds.toObject(CategoryItem.class);
 
-                            // 2. Lấy Document ID (GA_RAN, BURGER) và gán vào POJO
+                            // Lấy Document ID (GA_RAN, BURGER) và gán vào POJO
                             if (category != null) {
                                 category.setId(ds.getId());
                                 categoryItems.add(category);
@@ -133,7 +133,7 @@ public class MainRepository {
     public LiveData<ArrayList<FoodItem>> fetchFoodsByCategoryId(String categoryId){
         MutableLiveData<ArrayList<FoodItem>> listFoods = new MutableLiveData<>();
 
-        // Kiểm tra ID hợp lệ (Nên thêm kiểm tra null/empty ở đây nếu chưa có)
+        // Kiểm tra ID hợp lệ
         if (categoryId == null || categoryId.isEmpty()) {
             listFoods.setValue(new ArrayList<>());
             return listFoods;
@@ -198,8 +198,8 @@ public class MainRepository {
         }
 
        firestore.collection("users")
-                .whereEqualTo("email", email) // Tìm Document có trường "email" khớp
-                .limit(1) // Chỉ lấy 1 kết quả (vì email là duy nhất)
+                .whereEqualTo("email", email)
+                .limit(1) // Chỉ lấy 1 kết quả vì email là duy nhất
                .get()
                .addOnSuccessListener(queryDocumentSnapshots -> {
                    if (!queryDocumentSnapshots.isEmpty()) {
@@ -249,11 +249,6 @@ public class MainRepository {
         return favoriteFoods;
     }
 
-
-
-    /**
-     * Thêm/Xóa một món khỏi danh sách Yêu thích (Logic Toggle).
-     */
     public void toggleFavorite(String userId, FoodItem foodItem, boolean isCurrentlyFavorite) {
         // ID của món ăn sẽ là ID của Document
         if (userId == null || foodItem == null || foodItem.getId() == null) {
@@ -348,7 +343,7 @@ public class MainRepository {
                             CartItem item = ds.toObject(CartItem.class);
 
                             if (item != null) {
-                                // Gán ID của Document (Auto-ID) vào POJO
+                                // Gán ID của Document vào POJO
                                 item.setCartId(ds.getId());
                                 cartItems.add(item);
                             }

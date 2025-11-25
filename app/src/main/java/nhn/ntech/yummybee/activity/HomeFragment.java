@@ -219,14 +219,14 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnCategory
         recyclerViewCategories.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                // Khi người dùng BẮT ĐẦU chạm vào RecyclerView (ACTION_DOWN)
+                // Khi người dùng BẮT ĐẦU chạm vào RecyclerView
                 if (e.getAction() == MotionEvent.ACTION_DOWN) {
-                    // Yêu cầu View cha (ScrollView) KHÔNG can thiệp vào cử chỉ này
+                    // Yêu cầu View cha (ScrollView) không can thiệp vào cử chỉ này
                     rv.getParent().requestDisallowInterceptTouchEvent(true);
                 }
                 // Khi người dùng NHẤC NGÓN TAY LÊN (ACTION_UP) hoặc cử chỉ bị hủy
                 else if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
-                    // Cho phép View cha can thiệp trở lại (cho lần cuộn sau)
+                    // Cho phép View cha can thiệp trở lại cho lần cuộn sau
                     rv.getParent().requestDisallowInterceptTouchEvent(false);
                 }
                 return false; // Luôn trả về false để RecyclerView tự xử lý
